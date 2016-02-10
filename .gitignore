@@ -1,0 +1,13 @@
+_/
+\#*\#
+.*
+!.git*
+*~
+*.bak
+*.swp
+*.swo
+*.new
+/true
+/false
+*.o
+

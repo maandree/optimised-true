@@ -1,2 +1,46 @@
-Optimised implementations of true(1) and false(1).
+NAME
+	true - return true value
+	false - return false value
+
+SYNOPSIS
+	true [ignored arguments]
+	false [ignored arguments]
+
+DESCRIPTION
+	Optimised implementations of true(1p) and false(1p).
+	true and false shall do nothing, successfully and
+	unsuccessfully, respectively.
+
+	If your microarchitecture is especially supported,
+	true and false are implemented in assembler, without
+	a C runtime and only requires one page of memory.
+
+	If your microarchitecture is not especially supported,
+	true and false are implemented in C using only a
+	return statement in the main function. In this case,
+	a C runtime is used which slows down the program
+	significantly and it is usually required that somewhere
+	around 400 KB to 800 KB of memory is used (that is
+	about 150 pages.)
+
+OPTIONS
+	None.
+
+EXIT STATUS
+	true shall exit with the status 0.
+	false shall exit with any value other than 0.
+	In this implement false exits with the status 1.
+
+RATIONALE
+	None.
+
+NOTES
+	Your shell may have its own verions of true(1p)
+	and false(1p).
+
+BUGS
+	None. These programs are about as simple as it gets.
+
+SEE ALSO
+	true(1p), false(1p)
 

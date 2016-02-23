@@ -36,7 +36,11 @@ RATIONALE
 
 NOTES
 	Your shell may have its own verions of true(1p)
-	and false(1p).
+	and false(1p). If it doesn't, and false(1) is last
+	in your PATH, you could prove the performance of
+	false(1) by not installing false(1). However, if
+	this is done, your shell will probably complain
+	that false(1) cannot be found.
 
 BUGS
 	None. These programs are about as simple as it gets.

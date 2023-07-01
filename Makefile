@@ -1,4 +1,4 @@
-PREFIX = /usr/local
+PREFIX = /usr
 EXEC_PREFIX = $(PREFIX)
 BINDIR = $(EXEC_PREFIX)/bin
 DATADIR = $(PREFIX)/share

@@ -37,22 +37,17 @@ ifndef GENERIC
 endif
 
 install: true false
-	mkdir -p -- "$(DESTDIR)$(BINDIR)" "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)"
+	mkdir -p -- "$(DESTDIR)$(BINDIR)"
 	cp true false -- "$(DESTDIR)$(BINDIR)"
 	chmod 755 -- "$(DESTDIR)$(BINDIR)/true"
 	chmod 755 -- "$(DESTDIR)$(BINDIR)/false"
-	cp COPYING -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)"
-	chmod 644 -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)/COPYING"
 
 uninstall:
 	-rm -- "$(DESTDIR)$(BINDIR)/true"
 	-rm -- "$(DESTDIR)$(BINDIR)/false"
 	-rmdir -- "$(DESTDIR)$(BINDIR)"
-	-rm -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)/COPYING"
-	-rmdir "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)"
 
 clean:
 	-rm true.o true false.o false
 
 .PHONY: all clean install uninstall
-

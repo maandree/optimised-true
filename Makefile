@@ -1,53 +1,63 @@
-PREFIX = /usr
-EXEC_PREFIX = $(PREFIX)
-BINDIR = $(EXEC_PREFIX)/bin
-DATADIR = $(PREFIX)/share
-LICENSEDIR = $(DATADIR)/licenses
+.POSIX:
 
-PKGNAME = optimised-true
+MACHINE != uname -m
+MACHINE !=\
+	if test -d "$(MACHINE)"; then \
+		printf '%s\n' "$(MACHINE)"; \
+	else \
+		printf '%s\n' "generic"; \
+	fi
 
-LD_FLAGS = -s
-AS_FLAGS =
-CC_FLAGS = -nostdinc -ffreestanding
-MACHINE = $(shell uname -m)
+CONFIGFILE = config.mk
+include $(CONFIGFILE)
 
-ifneq ($(shell test -d $(MACHINE) && echo 0 || echo 1),0)
-GENERIC = 1
-LD = $(CC)
-endif
-ifndef GENERIC
-LD_FLAGS += -nodefaultlibs -nostdlib
-endif
+BIN = true false
 
-
-all: true false
-
+all: $(BIN)
 true: true.o
-	$(LD) $(LD_FLAGS) -o $@ $^
 false: false.o
-	$(LD) $(LD_FLAGS) -o $@ $^
 
-ifdef GENERIC
-%.o: generic/%.c
-	$(CC) $(CC_FLAGS) -c -o $@ $^
-endif
-ifndef GENERIC
-%.o: $(MACHINE)/%.s
-	$(AS) $(AS_FLAGS) -o $@ $^
-endif
+.SUFFIXES:
+.SUFFIXES: .o
 
-install: true false
-	mkdir -p -- "$(DESTDIR)$(BINDIR)"
-	cp true false -- "$(DESTDIR)$(BINDIR)"
-	chmod 755 -- "$(DESTDIR)$(BINDIR)/true"
-	chmod 755 -- "$(DESTDIR)$(BINDIR)/false"
+include $(MACHINE)/build.mk
+
+check: $(BIN:=-check)
+
+true-check: true
+	./true
+	./true
+	./true
+	./true
+	./true
+	./true
+	./true
+	./true
+	./true
+	./true
+
+false-check: false
+	set +e; ./false; test $$? = 1 || exit 1
+	set +e; ./false; test $$? = 1 || exit 1
+	set +e; ./false; test $$? = 1 || exit 1
+	set +e; ./false; test $$? = 1 || exit 1
+	set +e; ./false; test $$? = 1 || exit 1
+	set +e; ./false; test $$? = 1 || exit 1
+	set +e; ./false; test $$? = 1 || exit 1
+	set +e; ./false; test $$? = 1 || exit 1
+	set +e; ./false; test $$? = 1 || exit 1
+	set +e; ./false; test $$? = 1 || exit 1
+
+install: $(BIN)
+	mkdir -p -- "$(DESTDIR)/$(PREFIX)/bin"
+	cp -- $(BIN) "$(DESTDIR)/$(PREFIX)/bin"
+	cd -- "$(DESTDIR)/$(PREFIX)/bin" && chmod -- 755 "$(BIN)"
 
 uninstall:
-	-rm -- "$(DESTDIR)$(BINDIR)/true"
-	-rm -- "$(DESTDIR)$(BINDIR)/false"
-	-rmdir -- "$(DESTDIR)$(BINDIR)"
+	-cd -- "$(DESTDIR)/$(PREFIX)/bin" && rm -f -- $(BIN)
+	-rmdir -- "$(DESTDIR)/$(PREFIX)/bin"
 
 clean:
-	-rm true.o true false.o false
+	-rm -f -- *.o *.su $(BIN)
 
-.PHONY: all clean install uninstall
+.PHONY: all check true-check false-check install uninstall clean
